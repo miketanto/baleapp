@@ -1,0 +1,153 @@
+.overlay {
+  position: fixed;
+  display:block!important;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 9;
+  cursor: pointer;
+}
+
+.popup{
+  display:none;
+}
+
+.popupwrapper{
+  max-width:100vh;
+  max-height:100vh;
+  width:100%;
+  height:100%;
+  display:grid;
+  grid-template-rows:35% 30% 35%;
+  background-color: rgba(84,44,27,0.5);
+}
+
+.popuptabwrapper{
+  max-height:100%;
+  max-width:100%;
+  height:100%;
+  width:80%;
+  align-self:center;
+  justify-self:center;
+  display:grid;
+  grid-template-rows:10% 40% 10% 30%;
+  background-color: white;
+
+}
+
+.infowrapper{
+  max-height:100%;
+  max-width:100%;
+  height:100%;
+  width:100%;
+  align-self:center;
+  justify-self:center;
+  display:grid;
+  grid-template-columns:35% 65%;
+}
+
+.innerinfowrapper{
+  max-height:100%;
+  max-width:100%;
+  height:100%;
+  width:100%;
+  align-self:center;
+  justify-self:center;
+  display:grid;
+  grid-template-rows:repeat(3,1fr);
+}
+
+#popuplinediv{
+  width: 80%;
+  height:20%;
+  max-width:100%;
+  max-height:100%;
+  align-self:center;
+  justify-self:center;
+}
+
+.popup-order-form{
+  max-width:100%;
+  max-height:100%;
+  height:100%;
+  width:100%;
+  margin-left:20%;
+  justify-self:center;
+}
+
+.popup-food-picture{
+  max-width:100%;
+  max-height:100%;
+  height:80%;
+  width:70%;
+  justify-self:center;
+  align-self:center;
+}
+
+.popuptitle {
+  max-width:100%;
+  max-height:100%;
+  height:100%;
+  width:100%;
+  justify-self:center;
+  align-self:center;
+  font-family: Montserrat sans-serif;
+  font-weight:400;
+}
+.popupprice{
+  max-width:100%;
+  max-height:100%;
+  height:100%;
+  width:100%;
+  justify-self:center;
+  align-self:center;
+  font-family: Montserrat sans-serif;
+  font-weight:400;
+}
+#closebtn{
+  max-width:100%;
+  max-height:100%;
+  height:50%;
+  width:5%;
+  align-self:start;
+  justify-self:end;
+  padding:5%;
+  z-index:5;
+}
+
+.popup-submit-button {
+  top: 0;
+  left: 0;
+  margin-left: 30%;
+  margin-right: 0%!important;
+}
+
+.popup-amount-input{
+  width:10px;
+}
+
+.formwrapper{
+  max-height:100%;
+  max-width:100%;
+  width:80%;
+  height:100%;
+  display:grid;
+  grid-template-columns:10% 30% 10% 50%;
+  z-index:13;
+}
+#popupadd {
+  z-index:13;
+  align-self:center;
+}
+#popupsub {
+  z-index:13;
+  align-self:center;
+}
+
+#rawnamedata{
+  display:none;
+}

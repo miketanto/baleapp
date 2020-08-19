@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>{{title}}</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500" rel="stylesheet">
+<link href="{{url_for('static', filename='dist/css/style.css')}}" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+{% block pagestyles %}{% endblock %}
+{% block scripts%}{% endblock %}
+</head>
+<body class="mainclass">
+  <div class="topbar">
+    <img class="menubutton" src="{{url_for('static', filename='img/hamburgermenu.png')}}">
+    <img class="logo" src="{{url_for('static', filename='img/Balelogo.png')}}" alt="logo_here">
+    <img class="cart" src="{{url_for('static', filename='img/cart.png')}}">
+  </div>
+  <main><h1>{% block content%}{%endblock%}</h1></main>
+  <aside class="menunav">
+
+  </aside>
+  <aside class='foodcart'>
+    <div class="cartcontent">
+    <div class="headrow"><h2>ITEM</h2><h2>AMOUNT</h2><h2>PRICE</h2></div>
+    {% if 'theOrder' in session%}
+    {% for key,fooditem in session['theOrder'].items() %}
+    <div class="entryrow"><h3>{{fooditem['name']}}</h3><h3>{{fooditem['quantity']}}</h3><h3>{{fooditem['price']}}</h3></div>
+    {%endfor%}
+    {%endif%}
+    </div>
+  </aside>
+  <script>
+  $('.cart').click(function(e) {
+    e.preventDefault();
+    if ($('.foodcart').is(":visible") ) {
+      $('.foodcart').stop(true,true).hide("slide", { direction: "right" }, "slow");
+    } else {
+      $('.foodcart').stop(true,true).show("slide", { direction: "right" }, "slow");
+    }
+  });
+
+  $('.menubutton').click(function(e) {
+    e.preventDefault();
+    if ($('.menunav').is(":visible") ) {
+      $('.menunav').stop(true,true).hide("slide", { direction: "right" }, "slow");
+    } else {
+      $('.menunav').stop(true,true).show("slide", { direction: "right" }, "slow");
+    }
+  });
+  </script>
+</body>
+</html>

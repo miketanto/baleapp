@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>{{title}}</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500" rel="stylesheet">
+<link href="{{url_for('static', filename='dist/css/style.css')}}" rel="stylesheet">
+<link href="{{url_for('static', filename='dist/css/menunav.css')}}" rel="stylesheet">
+<link href="{{url_for('static', filename='dist/css/ordercart.css')}}" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+{% block pagestyles %}{% endblock %}
+{% block scripts%}{% endblock %}
+</head>
+<body class="mainclass">
+  <div class="body-wrapper">
+  <div class="topbar">
+    <div class=top-item-wrapper>
+    <img class="menubutton" src="{{url_for('static', filename='img/hamburgermenu.png')}}">
+    <img class="logo" src="{{url_for('static', filename='img/bale-lombok-logo.png')}}" alt="logo_here">
+    <img class="cart" src="{{url_for('static', filename='img/scart.png')}}">
+    </div>
+    <img class="seperator" src="{{url_for('static',filename='img/seperator.png')}}">
+  </div>
+  <main>{% block content%}{%endblock%}</main>
+  <aside class="menunav">
+  <div class="menunavwrapper">
+  <div></div>
+  <div class="starters">
+  <a class="navhead" href="{{url_for('menu_bp.appetizers',table=session['table'])}}">Starters</a>
+  <a class="navsub" href="{{url_for('menu_bp.appetizers',table=session['table'])}}">Appetizers</a>
+  <a class="navsub" href="{{url_for('menu_bp.appetizers',table=session['table'])}}">Soups</a>
+  </div>
+  <div class="maincourse">
+    <a class="navhead" href="{{url_for('menu_bp.balifood',table=session['table'])}}">Main Course</a>
+    <a class="navsub" href="{{url_for('menu_bp.balifood',table=session['table'])}}">Bali Cuisine</a>
+    <a class="navsub" href="{{url_for('menu_bp.lombokfood',table=session['table'])}}">Lombok Cuisine</a>
+    <a class="navsub" href="{{url_for('menu_bp.sundafood',table=session['table'])}}">Sunda Cuisine</a>
+    <a class="navsub" href="{{url_for('menu_bp.riceandnoodle',table=session['table'])}}">Rice and Noodles</a>
+  </div>
+  <div class="desserts"><a class="navhead" href="{{url_for('menu_bp.desserts',table=session['table'])}}">Desserts</a></div>
+  <div class="drinks"><a class="navhead" href="{{url_for('menu_bp.desserts',table=session['table'])}}">Drinks</a></div>
+  <div class="promo"><a class="navhead" href="{{url_for('menu_bp.desserts',table=session['table'])}}">Promo and Specials</a></div>
+  <div></div>
+</div>
+  </aside>
+
+  <aside class='foodcart'>
+    <div class="cartwrapper">
+    <div class="orderheader"><h2>Order Items</h2><img id= 'linedivtop' src="{{url_for('static',filename='img/linediv.png')}}"></div>
+    <div id="cartcontent">
+      {%set theorderkey=conc(table,'theOrder')%}
+      {% if theorderkey in session%}
+      {% for key,fooditem in session[theorderkey].items() %}
+
+      <div class='cartitem'>
+      <p class='cart-item-name'>{{fooditem['name']}}</p>
+      <p class='cart-item-price'>{{fooditem['price']}}</p>
+      <div class='cartedit'><div></div><p>+edit</p>
+      <div class='valueedit'>
+        <div class='editform'>
+        {%set rawname=fooditem['rawname']%}{%set ttl=fooditem['name']%}{%set itemprice=fooditem['unitprice']%}
+        {% set cartsubid = conc('cartsub',rawname) %}{% set cartaddid = conc('cartadd',rawname) %}{% set cartsubvar = conc('#cartsub',rawname) %}{% set cartaddvar = conc('#cartadd',rawname) %}
+        <img class='cartsub' id='{{cartsubid}}' src='{{url_for('static', filename='img/cartsub.png')}}'>
+        <p>{{fooditem['quantity']}}</p>
+        <img class='cartadd' id='{{cartaddid}}' src='{{url_for('static', filename='img/cartadd.png')}}'>
+        <p class="hiddencartsubid" style="display:none">{{cartsubid}}</p><p class="hiddencartaddid" style="display:none">{{cartaddid}}</p>
+        </div>
+        </div>
+        </div>
+      </div>
+      <script>
+        $('{{cartsubvar}}').click(function(){
+          var orderspecs= {
+                    quantity:parseInt(parseInt("{{fooditem['quantity']}}")-1),
+                    price:parseFloat("{{fooditem['price']}}"),
+                    name:String("{{fooditem['name']}}"),
+                    rawname:String("{{fooditem['rawname']}}"),
+                    unitprice:parseFloat("{{fooditem['unitprice']}}"),
+                    table:String("{{table}}")
+                }
+          socket.emit('socketedititem',orderspecs);
+        });
+
+        $('{{cartaddvar}}').click(function(){
+          var orderspecs= {
+                    quantity:parseInt(parseInt("{{fooditem['quantity']}}")+1),
+                    price:parseFloat("{{fooditem['price']}}"),
+                    name:String("{{fooditem['name']}}"),
+                    rawname:String("{{fooditem['rawname']}}"),
+                    unitprice:parseFloat("{{fooditem['unitprice']}}"),
+                    table:String("{{table}}")
+                }
+          socket.emit('socketedititem',orderspecs);
+        });
+        </script>
+        {%endfor%}
+        {%endif%}
+    </div>
+    <div class="paymentdetail"><h2>Payment Details</h2><img id= 'linedivbot' src="{{url_for('static',filename='img/linediv.png')}}">
+    <div class="detailwrapper">
+      {% set markupsubtotal=conc(table,'subtotal')%}{% set markupgrandtotal=conc(table,'grandtotal')%}{% set markupservices=conc(table,'services')%}
+      {% if not session[markupsubtotal]%}{%set x=session.__setitem__(markupsubtotal,0)%}{%endif%}
+      {% if not session[markupgrandtotal]%}{%set x=session.__setitem__(markupgrandtotal,0)%}{%endif%}
+      {% if not session[markupservices]%}{%set x=session.__setitem__(markupservices,0)%}{%endif%}
+    <h2 class='left'>Sub Total</h2><h2 class='right'>{{session[markupsubtotal]}}</h2>
+    <h3 class='left'>T&S</h3><h3 class='right'>{{session[markupservices]}}</h3>
+    <h1 class='left'>Grand Total</h1><h1 class='right'>{{session[markupgrandtotal]}}</h1>
+  </div>
+    <a href="{{url_for('menu_bp.balifood', table=session['table'])}}" class="cta">CHECKOUT</a>
+  </div>
+  </div>
+  </aside>
+</div>
+  <script id='mainscript'>
+  $('.menubutton').click(function(e) {
+    e.preventDefault();
+    if ($('.menunav').is(":visible") ) {
+      $('.menunav').stop(true,true).hide("slide", { direction: "left" }, "slow");
+    } else {
+      $('.menunav').stop(true,true).show("slide", { direction: "left" }, "slow");
+    }
+  });
+
+  if(localStorage.getItem("toggleState") == "1"){
+     $('.foodcart').show();
+  }else{
+    $('.foodcart').hide();
+  }
+
+
+$('.cart').click(function (e) {
+ var ts = localStorage.getItem("toggleState");
+ if(ts == null || ts == "0") {
+         var tv = "1";
+         localStorage.setItem("toggleState", tv);
+     }else {
+     var tv = "0";
+         localStorage.setItem("toggleState", tv);
+ }
+ e.preventDefault();
+ if ($('.foodcart').is(":visible") ) {
+   $('.foodcart').stop(true,true).hide("slide", { direction: "right" }, "slow");
+ } else {
+   $('.foodcart').stop(true,true).show("slide", { direction: "right" }, "slow");
+ }
+});
+
+socket = io.connect('http://' + document.domain + ':' + location.port);
+socket.on('connect',function(){
+  socket.emit('get_cart',{table:'{{table}}'});
+});
+
+socket.on('broadcast_additem',function(data){
+  if(data['table'] =="{{table}}"){
+    $.ajax({
+       type: 'POST',
+       url: "{{url_for('menu_bp.addCart', table=table)}}",
+       data: JSON.stringify(data),
+       dataType: "json",
+       success: function(data){
+                  $("#cartcontent").load(" #cartcontent > *");
+                $(".paymentdetail").load(" .paymentdetail > *");
+                location.reload();
+              }
+
+     });
+}
+
+});
+
+socket.on('broadcast_edititem',function(data){
+  if(data['table'] =="{{table}}"){
+    $.ajax({
+       type: 'POST',
+       url: "{{url_for('menu_bp.editCart', table=table)}}",
+       data: JSON.stringify(data),
+       dataType: "json",
+       success: function(data){
+                  $("#cartcontent").load(" #cartcontent > *");
+                $(".paymentdetail").load(" .paymentdetail > *");
+                location.reload();
+              }
+
+     });
+}
+
+});
+  </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{% extends 'mainlayout.html' %}
+{% block pagestyles%}<link href="{{url_for('static',filename='dist/css/cart.css')}}">{%endblock%}
+{% block content%}
+<h1>Menu Cover</h1>
+<div class="cartcontent">
+<div class="headrow"><h2>ITEM</h2><h2>AMOUNT</h2><h2>PRICE</h2></div>
+{% for key,fooditem in orders.items() %}
+<div class="entryrow"><h3>{{fooditem['name']}}</h3><h3>{{fooditem['quantity']}}</h3><h3>{{fooditem['price']}}</h3></div>
+
+{%endfor%}
+</div>
+{% endblock %}

@@ -1,0 +1,79 @@
+html, body {
+    overflow: auto;
+}
+
+body{
+  font-family: 'Montserrat', sans-serif;
+  background-color: white;
+}
+
+*{
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.grid-wrapper{
+  display:grid;
+  grid-template-rows:25% 25% 50%;
+  width: 100vw;
+ height: 100vh;
+}
+
+.cta{
+  background-color:#764F25;
+  text-decoration:none;
+  text-align:center;
+  font-weight:bold;
+  font-size: 1.2em; /* Let's say this computes to 16px */
+  padding: 0.8em 1.3em; /* 0.1875 * 16 = 10px */
+  border-radius: 0.3em; /* 0.1875 * 16 = 3px */
+  display:block;
+  color:#fff;
+  margin:0.6em;
+  align-self: center;
+  justify-self:center;
+}
+
+#mainlogo{
+  align-self:center;
+  justify-self:center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 65%;
+  max-height: 65%;
+}
+
+.cta-w-bg{
+  background: url("/static/img/Rempah1.png");
+  -webkit-background-size: contain;
+  -moz-background-size: contain;
+  -o-background-size: contain;
+  background-size: 100% 100%;
+  background-repeat:no-repeat;
+  display:grid;
+  grid-auto-rows: auto;
+}
+
+@media only screen and (min-width: 768px){
+
+  #mainlogo {
+    align-self:center;
+    justify-self:center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 35%;
+    max-height: 50%;
+  }
+  .cta-w-bg{
+    background: url("/static/img/Rempah1.png");
+    -webkit-background-size: contain;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: 50% 100%;
+    background-position: center;
+    background-repeat:no-repeat;
+    display:grid;
+    grid-auto-rows: auto;
+  }
+}

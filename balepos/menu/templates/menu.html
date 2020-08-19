@@ -1,0 +1,100 @@
+{% extends 'mainlayout.html' %}
+{% block pagestyles%}<link href="{{url_for('menu_bp.static',filename='dist/css/menu.css')}}" rel="stylesheet">
+<link href="{{url_for('menu_bp.static',filename='dist/css/menuitem.css')}}" rel="stylesheet">
+<link href="{{url_for('menu_bp.static',filename='dist/css/menupopup.css')}}" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>{%endblock%}
+{% block content%}
+{% set pagettl=replace(page,'menu_bp.',' ') %}{%set pagettl=title(pagettl)%}
+
+<div class="popup">
+  <div class="popupwrapper">
+    <div></div>
+    <div class="popuptabwrapper">
+    <img id='closebtn' src="{{url_for('static',filename='img/closebtn.png')}}">
+    <div class="infowrapper"><img class='popup-food-picture' src="" alt="Not Found" onerror=this.src="{{url_for('menu_bp.static', filename='img/bale_sign.png')}}">
+    <div class="innerinfowrapper"><h3 class="popuptitle"></h3><h3 id='' class="popupprice"></h3></div>
+    </div>
+    <img id='popuplinediv' src="{{url_for('static',filename='img/linedivdark.png')}}">
+    <div class='formwrapper'>
+            <p id='rawnamedata'></p>
+            <img id='popupsub'  src="{{url_for('static',filename='img/popupsub.png')}}">
+            <input size='10'  class='popup-amount-input' type="number" value=0 name="count">
+            <img id='popupadd'  src="{{url_for('static',filename='img/popupadd.png')}}">
+            <input type='button' value='add' name='addcart'  class='popup-submit-button'>
+      </div>
+  </div>
+  <div></div>
+  </div>
+</div>
+<script>
+$(".popup-submit-button").on('click',function(e){
+  socket.emit('additem', {"quantity":Number($('.popup-amount-input').val()),"price":Number(parseFloat($('.popup-amount-input').val())*parseFloat($('.popupprice').text())),
+  "name":$('.popuptitle').text(),"rawname":$('#rawnamedata').text(),"unitprice":Number($('.popupprice').text()),'table':"{{table}}"});
+  $('.popup').removeClass("overlay");
+});
+$('#popupsub').on('click',function(){
+  $('.popup-amount-input').val(Number($('.popup-amount-input').val())-1);
+});
+$('#popupadd').on('click',function(){
+  $('.popup-amount-input').val(Number($('.popup-amount-input').val())+1);
+});
+</script>
+<div class="menu-wrapper">
+  <div class="page-selector">
+  <form id='back' action="{{current_table}}" method="POST">
+  <input class='backbutton' type="image" name="backbutton" value="BACK" alt="BACK" src="{{url_for('static', filename='img/backbtn.png')}}">
+  </form>
+  <h2 class="page-category">{{pagettl}}</h2>
+  <form id='next' action="{{current_table}}" method="POST">
+  <input class='nextbutton' type="image" name="nextbutton" value="NEXT" alt="NEXT" src="{{url_for('static', filename='img/nextbtn.png')}}">
+  </form>
+  </div>
+  {% set itemheight= cnt/3*78 %}
+  {% set wrapperheight=conc(itemheight,"%")%}
+  <div class="item-grid-wrapper" style='height:{{wrapperheight}}'>
+    {%for rows in results%}
+    {% set item = 'img/' + rows.food_name + '.png'%}
+    {% set itemrawname =rows.food_name %}
+    {% set countid = conc('count',itemrawname) %}{% set nameid =  conc('name',itemrawname)  %}{% set priceid = conc('price',itemrawname)  %}{% set addid = conc('add',itemrawname)  %}{% set subid = conc('sub',itemrawname)  %}
+    {% set countvar =  conc('#count',itemrawname) %}{% set namevar =  conc('#name',itemrawname)  %}{% set pricevar =  conc('#price',itemrawname)  %}{% set addvar =  conc('#add',itemrawname)  %}{% set subvar =  conc('#sub',itemrawname)  %}
+    {% set orderctavar =  conc('#ordercta',itemrawname)  %}{% set orderctaid =  conc('ordercta',itemrawname)  %}
+    {% set orderformvar =  conc('#orderform',itemrawname)  %}{% set orderformid =  conc('orderform',itemrawname)  %}
+    {%set itemprice=rows.food_unitprice%}
+    {% set ttl=replace(itemrawname,'_',' ') %}{%set ttl=title(ttl)%}  {% set markuprawname =  conc(table,itemrawname) %}
+    <div class="menu-item">
+    <img class='food-picture' src="{{url_for('menu_bp.static',filename=item)}}" alt="Not Found" onerror=this.src="{{url_for('menu_bp.static', filename='img/bale_sign.png')}}">
+    <div class='specs-wrapper'>
+    <div class='nametag-wrapper'><h3 class='item-name-tag' id="{{nameid}}">{{ttl}}</h3> <h3 class='item-price-tag'>{{itemprice}}</h3></div>
+    <div class='ctawrapper'><h3 class="ordercta" id="{{orderctaid}}">+ADD</h3></div>
+    </div>
+    </div>
+    <script>
+    /*make the price and value a temporary one that is committed-->to session[orderlist]-->(key value to another dict that holds name, quatity and price) on click */
+    /*optimization in the pressing scheme findout how to ajax request and refresh directly pulling from db*/
+    /*make cart that shows values and payment option*/
+    var {{priceid}} = Number($('{{pricevar}}').text());
+    $('{{orderctavar}}').on('click', function(){
+      $('.popup-food-picture').attr('src',"{{url_for('menu_bp.static',filename=item)}}");
+      $('.popuptitle').text("{{ttl}}");
+      $('#rawnamedata').text("{{itemrawname}}")
+      /*Needed ItemRawname and TotalPrice*/
+      $('.popupprice').text("{{itemprice}}");
+      if('{{session[markuprawname]}}'!=''){
+          $('.popup-amount-input').val('{{session[markuprawname]}}')
+      }
+    $('.popup').addClass("overlay");
+    });
+
+
+    $('#closebtn').bind('click', function(){
+    $('.popup').removeClass("overlay");
+    });
+
+
+    </script>
+    {%endfor%}
+  </div>
+</div>
+<script>
+</script>
+{% endblock %}

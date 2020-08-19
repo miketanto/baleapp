@@ -1,0 +1,22 @@
+h1{
+  color:white;
+  text-align: : center;
+  font-family: Poppins;
+  font-weight: 400;
+}
+p{
+  color:white;
+  text-align: : center;
+  font-family: Poppins;
+  font-weight: 400;
+}
+
+div{
+  width:20%;
+  margin:auto;
+}
+
+h1, button{
+  display:inline-block;
+  padding:10px;
+}
