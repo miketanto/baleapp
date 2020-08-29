@@ -9,7 +9,7 @@ import redis
 import random
 from flask import jsonify
 
-rds=redis.Redis(db=0)
+rds=redis.from_url("redis-14825.c232.us-east-1-2.ec2.cloud.redislabs.com:14825")
 home_bp=Blueprint('home_bp',__name__,static_folder='static',template_folder='templates', static_url_path='/home/static')
 
 

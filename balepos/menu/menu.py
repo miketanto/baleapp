@@ -7,7 +7,7 @@ from .. import socketio
 import redis
 from flask import jsonify
 
-rds=redis.Redis(db=0)
+rds=redis.Redis()
 db=SQLAlchemy(app)
 
 menu_bp=Blueprint('menu_bp',__name__,static_folder='static',template_folder='templates', static_url_path='/menu/static')
