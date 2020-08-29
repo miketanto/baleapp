@@ -9,7 +9,7 @@ load_dotenv(path.join(basedir, '.env'))
 class Config:
     """Base config."""
     SESSION_TYPE = 'redis'
-    SESSION_REDIS = redis.from_url("redis-14825.c232.us-east-1-2.ec2.cloud.redislabs.com:14825")
+    SESSION_REDIS = redis.from_url("redis://rediscloud:YI2yzztWurvdkTUTm6FWa3G84XABtFkG@redis-14825.c232.us-east-1-2.ec2.cloud.redislabs.com:14825")
     TEMPLATES_AUTO_RELOAD = True
     STATIC_FOLDER = 'static'
     TEMPLATES_FOLDER = 'templates'
